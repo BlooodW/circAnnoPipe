@@ -7,7 +7,7 @@ An integrated pipeline used for circRNA annotation, including the prediction of 
 
 2. Ncbi-blast v2.2.31+ 
 
-3. Unzip the pack file with # tar -xzvf packs.tar.gz
+3. Download the "pack.tar.gz" file in the release, putting it in the main directory, and unzipping the pack file with: tar -xzvf packs.tar.gz
 
 3. Reference Genome: HG38.fa
     Please download the file from http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz. 

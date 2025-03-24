@@ -7,12 +7,14 @@ An integrated pipeline used for circRNA annotation, including the prediction of 
 
 2. Ncbi-blast v2.2.31+ 
 
+3. Unzipp the file with # tar -xzvf packs.tar.gz
+
 3. Reference Genome: HG38.fa
     Please download the file from http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz. 
     Uncompress hg38.fa.gz into HG38.fa (make sure to match the exact capitalization) and put it at /test/packs/beRBP/HG38/HG38.fa
 
 4. Conservation Score File: hg38.phyloP100way.bw
-	This file for conservation score is pretty big (~10G). Please download the file hg38.phyloP100way.bw at http://bioinfo.vanderbilt.edu/beRBP/download.html or http://hgdownload.cse.ucsc.edu/goldenpath/hg38/phyloP100way/hg38.phyloP100way.bw, and put it at /test/beRBP/lib/hg38.phyloP100way.bw. 
+	This file for conservation score is pretty big (~10G). Please download the file hg38.phyloP100way.bw at http://bioinfo.vanderbilt.edu/beRBP/download.html or http://hgdownload.cse.ucsc.edu/goldenpath/hg38/phyloP100way/hg38.phyloP100way.bw, and put it at /test/beRBP/lib/hg38.phyloP100way.bw.
 
 ########################
 ##### HOW TO RUN ######

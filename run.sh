@@ -86,7 +86,7 @@ run_TargetScan() {
 
 # ======================== miRNA-circRNA Result Integration ========================
 RNAhybrid_miRanda_merge() {
-    log_message "merging RNAhybrid 和 miRanda results..."
+    log_message "merging RNAhybrid, miRanda and TargetScan results..."
     python3 "$PWD/codes/miRNA/miRNA_num.py"
     
     if [[ $? -eq 0 ]]; then

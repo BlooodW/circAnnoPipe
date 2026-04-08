@@ -82,22 +82,10 @@ Note: This file is very large (approximately 10 GB), so please make sure suffici
 
 ## Installation
 
-Before running the pipeline, install the required dependencies and configure the environment.
-
-### Option 1. Without sudo privileges
-
-If you do not have sudo privileges, run:
+Before running the pipeline, install the required dependencies and configure the environment by running:
 
 ```bash
 /test/pre-run.sh
-```
-
-### Option 2. With sudo privileges
-
-If you do have sudo privileges, run:
-
-```bash
-/test/pre-run_sudo.sh
 ```
 
 ---

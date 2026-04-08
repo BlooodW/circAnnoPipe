@@ -18,7 +18,7 @@ COL-Anno is designed for comprehensive circRNA annotation and functional investi
 - **circRNA-RBP interaction prediction**
 - **Translation potential analysis**
 
-These modules are integrated into a single workflow so that users can run the full annotation pipeline with one command after preparing the required environment and reference files.
+These modules are organized in a modular workflow, allowing users to run the complete pipeline or selectively enable/disable specific modules by editing the main script.
 
 ---
 
@@ -90,6 +90,17 @@ Before running the pipeline, install the required dependencies and configure the
 
 ---
 
+## Input
+COL-Anno requires the following input files:
+
+### A target circRNA FASTA file
+
+### A miRNA FASTA file containing the miRNAs to be predicted against the target circRNAs
+
+These input files are used for interaction prediction and downstream annotation analysis.
+
+---
+
 ## How to Run
 
 After all required files have been prepared and the environment has been configured, run the main pipeline with:
@@ -108,17 +119,69 @@ COL-Anno contains the following modules:
 
 ### 1. circRNA-miRNA interaction prediction
 
-This module predicts potential interactions between circRNAs and miRNAs.
+This module predicts potential interactions between circRNAs and miRNAs using:
+
+`RNAhybrid`
+`miRanda`
+
+The results from these tools are further merged for integrated analysis.
 
 ### 2. circRNA-RBP interaction prediction
 
-This module predicts potential binding relationships between circRNAs and RNA-binding proteins (RBPs).
+This module predicts potential binding relationships between circRNAs and RNA-binding proteins (RBPs) using:
 
+`beRBP`
+`ENCORI`
+
+The results from these tools are merged for downstream interpretation.
 ### 3. Translation potential analysis
+This module evaluates the coding or translation potential of circRNAs using:
 
-This module evaluates the coding or translation potential of circRNAs.
+`IRESfinder`
+`ORFfinder`
 
 ---
+
+## Modular Design
+
+The `run.sh` script is modular and can be customized by enabling or disabling specific functions in the `main()` section.
+
+For example, the main workflow is organized as follows:
+
+```bash
+# ======================== Main Function ========================
+main() {
+    run_RNAhybrid
+    run_miRanda
+    RNAhybrid_miRanda_merge
+    run_beRBP
+    run_ENCORI
+    beRBP_ENCORI_merge
+    run_IRESfinder
+    run_ORFfinder
+}
+
+# Execute main function
+main
+```
+
+Users can control which modules are executed by commenting out specific function calls in main(). For example, if you only want to run circRNA-miRNA interaction prediction, you may keep:
+
+```bash
+main() {
+    run_RNAhybrid
+    run_miRanda
+    RNAhybrid_miRanda_merge
+    # run_beRBP
+    # run_ENCORI
+    # beRBP_ENCORI_merge
+    # run_IRESfinder
+    # run_ORFfinder
+}
+
+main
+```
+This modular design makes COL-Anno flexible for different analysis purposes.
 
 ## Output
 

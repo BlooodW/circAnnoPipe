@@ -89,9 +89,9 @@ Before running the pipeline, install the required dependencies and configure the
 ## Input
 COL-Anno requires the following input files:
 
-- ##A target circRNA FASTA file##
+- **A target circRNA FASTA file**
 
-- ##A miRNA FASTA file containing the miRNAs to be predicted against the target circRNAs##
+- **A miRNA FASTA file containing the miRNAs to be predicted against the target circRNAs**
 
 These input files are used for interaction prediction and downstream annotation analysis.
 
@@ -117,8 +117,8 @@ COL-Anno contains the following modules:
 
 This module predicts potential interactions between circRNAs and miRNAs using:
 
-- ##`RNAhybrid`##
-- ##`miRanda`##
+- **`RNAhybrid`**
+- **`miRanda`**
 
 The results from these tools are further merged for integrated analysis.
 
@@ -126,15 +126,15 @@ The results from these tools are further merged for integrated analysis.
 
 This module predicts potential binding relationships between circRNAs and RNA-binding proteins (RBPs) using:
 
-- ##`beRBP`##
-- ##`ENCORI`##
+- **`beRBP`**
+- **`ENCORI`**
 
 The results from these tools are merged for downstream interpretation.
 ### 3. Translation potential analysis
 This module evaluates the coding or translation potential of circRNAs using:
 
-- ##`IRESfinder`##
-- ##`ORFfinder`##
+- **`IRESfinder`**
+- **`ORFfinder`**
 
 ---
 

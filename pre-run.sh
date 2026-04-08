@@ -1,21 +1,19 @@
 #!/bin/bash
 
-# 设置日志文件
 LOG_FILE="install_log.txt"
 echo "Installation Log - $(date)" > "$LOG_FILE"
 
-# 记录日志的函数
 log_message() {
     echo "$1" | tee -a "$LOG_FILE"
 }
 
-# 设置安装路径为用户本地路径
+# set direction
 INSTALL_DIR="$HOME/local"
 mkdir -p "$INSTALL_DIR"
 
 cd packs
 
-# ======================== RNAhybrid 安装 ========================
+# ======================== RNAhybrid Installation ========================
 RNAhybrid_check_installed() {
     log_message "Checking if RNAhybrid is already installed..."
     if which RNAhybrid &> /dev/null; then
@@ -30,7 +28,6 @@ RNAhybrid_check_installed() {
 RNAhybrid_install_dependencies() {
     log_message "Installing required dependencies..."
     
-    # 检查是否安装了 conda
     if command -v conda &> /dev/null; then
         log_message "Using conda environment to install dependencies..."
         conda create -y -n RNAhybrid_env make gcc wget
@@ -66,7 +63,7 @@ RNAhybrid_configure_and_compile() {
     cd ../
 }
 
-# ======================== miRanda 安装 ========================
+# ======================== miRanda Installation ========================
 extract_and_navigate_to_miranda() {
     log_message "Uncompressing miranda-3.3a-0.tar.bz2..."
     cd miranda
@@ -75,7 +72,92 @@ extract_and_navigate_to_miranda() {
     cd ../
 }
 
-# ======================== beRBP 及依赖安装 ========================
+# ======================== TargetScan Installation ========================
+install_TargetScan() {
+  log_message "Installing TargetScan required dependencies..."
+
+  source "$(conda info --base)/etc/profile.d/conda.sh" || {
+    log_message "Error: cannot source conda.sh"
+    exit 1
+  }
+
+  if conda env list | awk '{print $1}' | grep -qx "bio_env"; then
+    log_message "Conda env exists: bio_env"
+  else
+    log_message "Creating conda env: bio_env"
+    conda create -y -n bio_env -c conda-forge python=3.10 || {
+      log_message "Error: Environment creation failed."
+      exit 1
+    }
+  fi
+
+  conda activate bio_env || {
+    log_message "Error: conda activate failed."
+    exit 1
+  }
+
+  log_message "Installing biopython..."
+  conda install -y -c conda-forge biopython || {
+    log_message "Error: biopython install failed."
+    conda deactivate
+    exit 1
+  }
+
+  log_message "Installing perl..."
+  conda install -y -c conda-forge perl || {
+    log_message "Error: perl install failed."
+    conda deactivate
+    exit 1
+  }
+
+  log_message "Installing perl-bioperl..."
+  conda install -y -c conda-forge -c bioconda perl-bioperl || {
+    log_message "Error: perl-bioperl install failed."
+    conda deactivate
+    exit 1
+  }
+
+  log_message "Installing perl-xml-parser..."
+  export CONDA_SOLVER=libmamba
+  conda install -y -c conda-forge conda-libmamba-solver >/dev/null 2>&1 || true
+  conda config --set channel_priority strict >/dev/null 2>&1 || true
+  conda install -y -c conda-forge expat perl-xml-parser || {
+    log_message "Error: perl-xml-parser install failed."
+    conda deactivate
+    exit 1
+  }
+
+  log_message "Installing perl-xml-twig..."
+  conda install -y -c conda-forge -c bioconda perl-xml-twig || {
+    log_message "Error: perl-xml-twig install failed."
+    conda deactivate
+    exit 1
+  }
+
+  log_message "Installing perl-statistics-lite..."
+  conda install -y -c conda-forge -c bioconda perl-statistics-lite || {
+    log_message "Error: perl-statistics-lite install failed."
+    conda deactivate
+    exit 1
+  }
+
+  log_message "Installing cpanminus (optional)..."
+  conda install -y -c conda-forge perl-app-cpanminus || {
+    log_message "Warning: perl-app-cpanminus install failed (continuing)."
+  }
+
+  log_message "Verifying Perl modules..."
+  perl -MXML::Parser -e '1' >/dev/null 2>&1 || { log_message "Error: XML::Parser not usable"; conda deactivate; exit 1; }
+  perl -MXML::Twig -e '1'   >/dev/null 2>&1 || { log_message "Error: XML::Twig not usable"; conda deactivate; exit 1; }
+  perl -MBio::Perl -e '1'   >/dev/null 2>&1 || { log_message "Error: Bio::Perl not usable"; conda deactivate; exit 1; }
+  perl -MStatistics::Lite -e '1' >/dev/null 2>&1 || { log_message "Error: Statistics::Lite not usable"; conda deactivate; exit 1; }
+
+  log_message "TargetScan dependency setup completed."
+  conda deactivate
+}
+
+
+# ======================== beRBP Installation ========================
 install_beRBP() {
     log_message "Installing beRBP..."
     cd beRBP || { log_message "Error: Unable to enter beRBP directory."; exit 1; }
@@ -122,39 +204,35 @@ create_blastdb() {
     cd ../../
 }
 
-# ======================== IRESfinder 安装 ========================
+# ======================== IRESfinder Installation ========================
 install_IRESfinder() {
     log_message "Installing IRESfinder..."
     
-    # 检查 conda 是否安装
+    # check conda installation
     if ! command -v conda &> /dev/null; then
         log_message "Error: Conda is not installed. Please install Miniconda or Anaconda first."
         exit 1
     fi
 
-    # 创建 Python2.7 的 conda 环境
     log_message "Creating conda environment for Python 2.7..."
     conda create -y -n py27_env python=2.7
     source activate py27_env
 
-    # 安装 pip 并安装所需依赖
     log_message "Installing dependencies..."
     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
     python get-pip.py
     rm get-pip.py
     pip install numpy==1.16.6 scipy==1.2.3 scikit-learn==0.17 biopython==1.76
 
-    # 下载并安装 IRESfinder
     log_message "Cloning IRESfinder repository..."
     git clone https://github.com/xiaofengsong/IRESfinder.git
     cd IRESfinder || { log_message "Error: Unable to enter IRESfinder directory."; exit 1; }
 
-    # 运行测试
+    # test
     log_message "Running IRESfinder test..."
     python IRESfinder.py -f examples/example_mode_1.fa -o example_mode_1.result -m 1
     python IRESfinder.py -f examples/example_mode_2.fa -o example_mode_2.result -m 2 -w 174 -s 50
 
-    # 退出 conda 环境
     conda deactivate
     cd ../
     
@@ -162,14 +240,12 @@ install_IRESfinder() {
 }
 
 
-# ======================== ORFfinder 安装 ========================
+# ======================== ORFfinder Installation ========================
 install_ORFfinder() {
     log_message "Installing ORFfinder..."
 
-    # 赋予执行权限
     chmod +x ORFfinder
 
-    # 检查 OS 以确保正确的库环境
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
         OS=$ID
@@ -178,7 +254,7 @@ install_ORFfinder() {
         exit 1
     fi
 
-    # 在本地环境安装 libdw，避免 sudo
+    # install libdw
     case "$OS" in
         ubuntu|debian) 
             log_message "Attempting to install libdw locally..."
@@ -188,7 +264,6 @@ install_ORFfinder() {
             export LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
             export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
             
-            # 下载并编译 libdw
             cd "$HOME/local" || exit 1
             wget http://ftp.debian.org/debian/pool/main/e/elfutils/elfutils_0.188.orig.tar.bz2
             tar -xjf elfutils_0.188.orig.tar.bz2
@@ -207,8 +282,9 @@ install_ORFfinder() {
     log_message "ORFfinder installation completed."
 }
 
-# ======================== 主函数 ========================
+# ======================== main ========================
 main() {
+    #install_TargetScan
     if ! RNAhybrid_check_installed; then
         RNAhybrid_install_dependencies
         extract_rnahybrid
@@ -225,5 +301,5 @@ main() {
     install_ORFfinder
 }
 
-# 执行主函数
+# execute main
 main

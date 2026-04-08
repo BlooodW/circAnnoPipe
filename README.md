@@ -1,7 +1,3 @@
-# circAnnoPipe
-COL-Anno is an integrated pipeline for circRNA annotation. It supports the prediction of circRNA-miRNA interactions, circRNA-RBP interactions, and the coding potential of circRNAs.
-By combining multiple annotation modules into a single workflow, COL-Anno provides a convenient framework for downstream functional analysis of circRNAs.
-
 # COL-Anno
 
 COL-Anno is an integrated pipeline for circRNA annotation. It supports the prediction of circRNA-miRNA interactions, circRNA-RBP interactions, and the translation potential of circRNAs.

@@ -1,30 +1,142 @@
 # circAnnoPipe
-An integrated pipeline used for circRNA annotation, including the prediction of circRNA-miRNA interactions, circRNA-RBP interactions and abilities of translation.
+COL-Anno is an integrated pipeline for circRNA annotation. It supports the prediction of circRNA-miRNA interactions, circRNA-RBP interactions, and the coding potential of circRNAs.
+By combining multiple annotation modules into a single workflow, COL-Anno provides a convenient framework for downstream functional analysis of circRNAs.
 
-###### PREREQUISITES 
+# COL-Anno
 
-1. R 4.4+
+COL-Anno is an integrated pipeline for circRNA annotation. It supports the prediction of circRNA-miRNA interactions, circRNA-RBP interactions, and the translation potential of circRNAs.
 
-2. Ncbi-blast v2.2.31+ 
+By integrating multiple annotation modules into a unified workflow, COL-Anno provides a convenient framework for downstream functional analysis of circRNAs.
 
-3. Download the "pack.tar.gz" file in the release, putting it in the main directory, and unzipping the pack file with: tar -xzvf packs.tar.gz
+---
 
-3. Reference Genome: HG38.fa
-    Please download the file from http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz. 
-    Uncompress hg38.fa.gz into HG38.fa (make sure to match the exact capitalization) and put it at /test/packs/beRBP/HG38/HG38.fa
+## Overview
 
-4. Conservation Score File: hg38.phyloP100way.bw
-	This file for conservation score is pretty big (~10G). Please download the file hg38.phyloP100way.bw at http://bioinfo.vanderbilt.edu/beRBP/download.html or http://hgdownload.cse.ucsc.edu/goldenpath/hg38/phyloP100way/hg38.phyloP100way.bw, and put it at /test/beRBP/lib/hg38.phyloP100way.bw.
+COL-Anno is designed for comprehensive circRNA annotation and functional investigation. The pipeline includes three major components:
 
-###### HOW TO RUN 
+- **circRNA-miRNA interaction prediction**
+- **circRNA-RBP interaction prediction**
+- **Translation potential analysis**
 
-1. Setting Up the Environment
-   Before executing the pipeline, install the required packages and configure the environment:
-    If you do not have sudo privileges, run: /test/pre-run.sh
-    If you have sudo privileges, run: /test/pre-run_sudo.sh
+These modules are integrated into a single workflow so that users can run the full annotation pipeline with one command after preparing the required environment and reference files.
 
-2. Running the Pipeline
-    Once the environment is set up, execute the main script to run all necessary tools automatically: /test/run.sh
+---
 
-###### OUTPUT 
-All results and generated files will be stored in: /test/results
+## Requirements
+
+To run COL-Anno, the following software is required:
+
+- **R 4.4+**
+- **NCBI BLAST 2.2.31+**
+
+In addition, several external resources must be downloaded and placed in the correct directories before running the pipeline.
+
+---
+
+## Preparation
+
+### 1. Download auxiliary package files
+
+Download the `packs.tar.gz` file from the **Release** page of this repository, place it in the main project directory, and extract it using:
+
+```bash
+tar -xzvf packs.tar.gz
+```
+
+### 2. Download the reference genome
+
+Download the human reference genome file `hg38.fa.gz` from UCSC:
+
+```bash
+http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
+```
+
+After downloading, decompress it and rename the file to:
+
+```bash
+HG38.fa
+```
+
+Then place it in the following directory:
+
+```bash
+/test/packs/beRBP/HG38/HG38.fa
+```
+
+### 3. Download the conservation score file
+Download the conservation score file hg38.phyloP100way.bw from one of the following sources:
+
+```bash
+http://hgdownload.cse.ucsc.edu/goldenpath/hg38/phyloP100way/hg38.phyloP100way.bw
+```
+
+Then place it in:
+
+```bash
+/test/beRBP/lib/hg38.phyloP100way.bw
+```
+
+Note: This file is very large (approximately 10 GB), so please make sure sufficient disk space is available.
+
+---
+
+## Installation
+
+Before running the pipeline, install the required dependencies and configure the environment.
+
+### Option 1. Without sudo privileges
+
+If you do not have sudo privileges, run:
+
+```bash
+/test/pre-run.sh
+```
+
+### Option 2. With sudo privileges
+
+If you do have sudo privileges, run:
+
+```bash
+/test/pre-run_sudo.sh
+```
+
+---
+
+## How to Run
+
+After all required files have been prepared and the environment has been configured, run the main pipeline with:
+
+```bash
+/test/run.sh
+```
+
+This script will automatically execute all necessary tools in the COL-Anno workflow.
+
+---
+
+## Modules
+
+COL-Anno contains the following modules:
+
+### 1. circRNA-miRNA interaction prediction
+
+This module predicts potential interactions between circRNAs and miRNAs.
+
+### 2. circRNA-RBP interaction prediction
+
+This module predicts potential binding relationships between circRNAs and RNA-binding proteins (RBPs).
+
+### 3. Translation potential analysis
+
+This module evaluates the coding or translation potential of circRNAs.
+
+---
+
+## Output
+
+All generated files and final results will be stored in:
+
+```bash
+/test/results
+```
+This directory contains the output files generated by the different modules in the COL-Anno pipeline.

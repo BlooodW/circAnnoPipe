@@ -211,3 +211,10 @@ This module generates raw prediction results from RNAhybrid, miRanda, and Target
 
 This file is a tab-delimited text file with the following columns:
 
+| Column | Description |
+|--------|-------------|
+| `circRNA` | ID of the target circRNA. |
+| `miRNA` | ID of the predicted miRNA. |
+| `num_miRanda` | Number of binding sites predicted by miRanda for this circRNA-miRNA pair. |
+| `num_RNAhybrid` | Number of binding sites predicted by RNAhybrid for this circRNA-miRNA pair. |
+| `num_TargetScan` | Number of binding sites predicted by TargetScan for this circRNA-miRNA pair. |

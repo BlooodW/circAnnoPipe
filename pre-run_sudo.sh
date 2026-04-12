@@ -1,15 +1,13 @@
 #!/bin/bash
 
-# 设置日志文件
 LOG_FILE="install_log.txt"
 echo "Installation Log - $(date)" > "$LOG_FILE"
 
-# 记录日志的函数
 log_message() {
     echo "$1" | tee -a "$LOG_FILE"
 }
 
-# 检查是否有 sudo 权限
+# Checking Sudo Previledge
 check_sudo() {
     log_message "Checking for sudo privileges..."
     if ! sudo -v; then
@@ -20,7 +18,7 @@ check_sudo() {
 
 cd packs
 
-# ======================== RNAhybrid 安装 ========================
+# ======================== RNAhybrid Installation ========================
 RNAhybrid_check_installed() {
     log_message "Checking if RNAhybrid is already installed..."
     if which RNAhybrid &> /dev/null; then
@@ -72,7 +70,7 @@ RNAhybrid_configure_and_compile() {
     log_message "RNAhybrid installation completed."
 }
 
-# ======================== miRanda 安装 ========================
+# ======================== miRanda Installation ========================
 extract_and_navigate_to_miranda() {
     log_message "Uncompressing miranda-3.3a-0.tar.bz2..."
     cd miranda
@@ -81,7 +79,7 @@ extract_and_navigate_to_miranda() {
     cd ../
 }
 
-# ======================== beRBP 及依赖安装 ========================
+# ======================== beRBP Installation ========================
 install_beRBP() {
     # wget https://bioinfo.vanderbilt.edu/beRBP/download/beRBP.tgz
     # if [ $? -ne 0 ]; then
@@ -141,7 +139,7 @@ create_blastdb() {
     cd ../../
 }
 
-# ======================== IRESfinder 安装 ========================
+# ======================== IRESfinder Installation ========================
 install_IRESfinder() {
     log_message "Installing IRESfinder..."
     sudo apt-get install -y python2.7 python2.7-dev python-pip
@@ -160,7 +158,7 @@ install_IRESfinder() {
     log_message "IRESfinder installation and test completed."
 }
 
-# ======================== ORFfinder 安装 ========================
+# ======================== ORFfinder Installation ========================
 install_ORFfinder() {
     chmod +x ORFfinder
     if [[ -f /etc/os-release ]]; then
@@ -180,7 +178,7 @@ install_ORFfinder() {
     log_message "ORFfinder installation completed."
 }
 
-# ======================== 主函数 ========================
+# ======================== MAIN ========================
 main() {
     check_sudo
     if ! RNAhybrid_check_installed; then
